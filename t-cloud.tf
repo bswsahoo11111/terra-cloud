@@ -5,35 +5,17 @@ provider "aws" {
   
 }
 
-data "aws_vpc" "name" {
+locals {
+    setup_name = "tuts" 
   
 }
-resource "aws_instance" "web" {
-    provider = aws.east
-    ami = "ami-096fda3c22c1c990a"
-    instance_type = "t2.micro"
 
-
-}
- 
-resource "aws_instance" "test" {
-    for_each = {
-        prod = "t2.micro"
-        dev = "t2.micro"
-    }
-    
+resource "aws_instance" "foobar" {
     ami = "ami-03d64741867e7bb94"
-    instance_type = each.value
+    instance_type = "t2.micro"
     tags = {
-      "Name" = "dev ${each.key}"
-
+        Name = "${local.setup_name}.new" 
 
     }
   
 }
-
-output "foo" {
-    value = aws_instance.test["prod"].public_ip
-  
-}
-
